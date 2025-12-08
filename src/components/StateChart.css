@@ -129,6 +129,19 @@
   text-align: left;
 }
 
+.user-state-highlight {
+  background-color: rgba(255, 215, 0, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin: -0.5rem;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.gold-star {
+  color: #FFD700;
+  font-size: 1rem;
+}
+
 .stats-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

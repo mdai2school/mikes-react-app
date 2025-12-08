@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useAuth } from '../context/AuthContext';
 import './StateChart.css';
 
 function StateChart() {
@@ -6,6 +7,7 @@ function StateChart() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMode, setSelectedMode] = useState('car');
+  const { userState } = useAuth();
 
   useEffect(() => {
     loadData();
@@ -240,27 +242,37 @@ function StateChart() {
                   No data available. Please check the CSV file.
                 </div>
               ) : (
-                barData.map((item, index) => (
-                  <div key={`${item.state}-${index}`} className="bar-wrapper">
-                    <div className="bar-label">{item.state}</div>
-                    <div className="bar-container">
-                      <div 
-                        className="bar"
-                        style={{
-                          width: `${(item.value / maxValue) * 100}%`,
-                          backgroundColor: modeColors[selectedMode]
-                        }}
-                      >
-                        <span className="bar-value">
-                          {item.value.toFixed(1)}%
-                        </span>
+                barData.map((item, index) => {
+                  const isUserState = userState && item.state === userState;
+                  return (
+                    <div 
+                      key={`${item.state}-${index}`} 
+                      className={`bar-wrapper ${isUserState ? 'user-state-highlight' : ''}`}
+                    >
+                      <div className="bar-label">
+                        {item.state}
+                        {isUserState && <span className="gold-star"> ⭐</span>}
+                      </div>
+                      <div className="bar-container">
+                        <div 
+                          className="bar"
+                          style={{
+                            width: `${(item.value / maxValue) * 100}%`,
+                            backgroundColor: isUserState ? '#FFD700' : modeColors[selectedMode],
+                            boxShadow: isUserState ? '0 0 10px rgba(255, 215, 0, 0.5)' : 'none'
+                          }}
+                        >
+                          <span className="bar-value">
+                            {item.value.toFixed(1)}%
+                          </span>
+                        </div>
+                      </div>
+                      <div className="bar-workers">
+                        {item.totalWorkers.toLocaleString()} workers
                       </div>
                     </div>
-                    <div className="bar-workers">
-                      {item.totalWorkers.toLocaleString()} workers
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           </div>
