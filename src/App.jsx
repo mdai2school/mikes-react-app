@@ -36,7 +36,7 @@ function AppContent() {
           fontSize: '0.9rem',
           boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
         }}>
-          👆 Click your profile to select your state and highlight it in gold!
+          👆 Click your profile to select your state and have it highlighted!
         </div>
       )}
       <StateChart />

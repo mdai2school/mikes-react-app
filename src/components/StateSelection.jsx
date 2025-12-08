@@ -76,7 +76,7 @@ function StateSelection({ onClose }) {
     
     try {
       await saveUserState(selectedState);
-      setMessage('State saved successfully! Your state will be highlighted in gold on the chart.');
+      setMessage('State saved successfully! Your state will be highlighted on the chart.');
       setTimeout(() => {
         if (onClose) onClose();
       }, 1500);
@@ -98,7 +98,7 @@ function StateSelection({ onClose }) {
         
         <div className="state-selection-content">
           <p className="explanation-text">
-            Select your home state to have it highlighted in <strong style={{ color: '#FFD700' }}>gold</strong> on the transportation chart. 
+            Select your home state to have it <strong style={{ color: '#FFD700' }}>highlighted</strong> on the transportation chart. 
             This makes it easy to find and compare your state's transportation data at a glance. 
             Your selection will be saved and remembered between sessions.
           </p>

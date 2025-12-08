@@ -1,19 +1,15 @@
 // Firebase Configuration
-// Replace these with your actual Firebase config values
-// You can find them in Firebase Console > Project Settings > General > Your apps
-
 import { initializeApp } from 'firebase/app';
 import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// TODO: Replace with your Firebase config
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "your-api-key",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "your-project.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "your-project-id",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "your-project.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "your-app-id"
+  apiKey: "AIzaSyA22FgX4aNnchI9nt5g1ebb8DES_vGl_iU",
+  authDomain: "mikes-react-app-18323.firebaseapp.com",
+  projectId: "mikes-react-app-18323",
+  storageBucket: "mikes-react-app-18323.firebasestorage.app",
+  messagingSenderId: "1034279684626",
+  appId: "1:1034279684626:web:d1ed8290f8b49b6940a6cb"
 };
 
 // Initialize Firebase

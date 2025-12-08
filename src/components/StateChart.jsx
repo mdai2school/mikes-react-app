@@ -196,13 +196,9 @@ function StateChart() {
       </div>
 
       {loading && (
-        <div className="loading-container" style={{ textAlign: 'center', padding: '40px' }}>
-          <div className="loading" style={{ fontSize: '1.5rem', color: '#fff' }}>
-            Loading transportation data...
-          </div>
-          <div className="loading-subtitle" style={{ marginTop: '10px', color: '#aaa' }}>
-            Processing 85,000+ census tract records
-          </div>
+        <div className="loading-container">
+          <div className="loading">Loading transportation data...</div>
+          <div className="loading-subtitle">Processing 85,000+ census tract records</div>
         </div>
       )}
 

@@ -52,7 +52,10 @@ export const AuthProvider = ({ children }) => {
         lastUpdated: new Date().toISOString()
       }, { merge: true });
       setUserState(state);
-      // Also save to localStorage as backup
+      // Also save to localStorage as backup (with uid key)
+      if (currentUser?.uid) {
+        localStorage.setItem(`userState_${currentUser.uid}`, state);
+      }
       localStorage.setItem('userState', state);
     } catch (error) {
       console.error('Error saving user state:', error);
@@ -62,7 +65,13 @@ export const AuthProvider = ({ children }) => {
   // Load user's selected state
   const loadUserState = async (uid) => {
     try {
-      // Try loading from Firestore first
+      // Try localStorage first for faster loading
+      const savedState = localStorage.getItem(`userState_${uid}`);
+      if (savedState) {
+        setUserState(savedState);
+      }
+      
+      // Then try loading from Firestore (async, doesn't block)
       const userRef = doc(db, 'users', uid);
       const userSnap = await getDoc(userRef);
       
@@ -70,21 +79,23 @@ export const AuthProvider = ({ children }) => {
         const data = userSnap.data();
         if (data.selectedState) {
           setUserState(data.selectedState);
-          localStorage.setItem('userState', data.selectedState);
+          localStorage.setItem(`userState_${uid}`, data.selectedState);
           return data.selectedState;
         }
       }
       
-      // Fallback to localStorage
-      const savedState = localStorage.getItem('userState');
-      if (savedState) {
-        setUserState(savedState);
-        return savedState;
+      // Fallback to localStorage without uid key
+      if (!savedState) {
+        const fallbackState = localStorage.getItem('userState');
+        if (fallbackState) {
+          setUserState(fallbackState);
+          return fallbackState;
+        }
       }
     } catch (error) {
       console.error('Error loading user state:', error);
       // Fallback to localStorage
-      const savedState = localStorage.getItem('userState');
+      const savedState = localStorage.getItem(`userState_${uid}`) || localStorage.getItem('userState');
       if (savedState) {
         setUserState(savedState);
         return savedState;
@@ -95,17 +106,28 @@ export const AuthProvider = ({ children }) => {
 
   // Monitor auth state changes
   useEffect(() => {
+    let mounted = true;
+    
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!mounted) return;
+      
       setCurrentUser(user);
+      
       if (user) {
-        await loadUserState(user.uid);
+        // Set loading false immediately so user sees the app
+        setLoading(false);
+        // Load user state asynchronously (non-blocking)
+        loadUserState(user.uid).catch(console.error);
       } else {
         setUserState(null);
+        setLoading(false);
       }
-      setLoading(false);
     });
 
-    return unsubscribe;
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
   }, []);
 
   const value = {
@@ -121,7 +143,19 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {loading ? (
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          minHeight: '100vh',
+          color: 'rgba(255, 255, 255, 0.7)'
+        }}>
+          Loading...
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };
