@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "mikes-react-app-18323",
     "public": "dist",
     "ignore": [
       "firebase.json",
