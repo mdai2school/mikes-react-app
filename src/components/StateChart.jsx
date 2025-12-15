@@ -198,7 +198,7 @@ function StateChart() {
       {loading && (
         <div className="loading-container">
           <div className="loading">Loading transportation data...</div>
-          <div className="loading-subtitle">Processing 85,000+ census tract records</div>
+          <div className="loading-subtitle">Processing aggregated state dataset</div>
         </div>
       )}
 

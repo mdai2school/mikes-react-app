@@ -7,5 +7,15 @@ export default defineConfig({
   base: '/',
   build: {
     outDir: 'dist',
+    rollupOptions: {
+      output: {
+        // Split large vendor libs so the main chunk stays small
+        manualChunks(id) {
+          if (id.includes('node_modules/firebase')) return 'firebase';
+          if (id.includes('node_modules/react-router-dom')) return 'router';
+          if (id.includes('node_modules/react')) return 'react-vendor';
+        },
+      },
+    },
   }
 })
